@@ -5,14 +5,18 @@ import Button from "../Button";
 import { format } from 'date-fns';
 import { useMemo } from "react";
 import { BiCalendar } from "react-icons/bi";
+import useEditModal from "@/hooks/useEditModal";
 
 interface UserBioProps {
     userId: string;
 }
 
 const UserBio: React.FC<UserBioProps> = ({ userId }) => {
-    const { data: currentUser } = useCurrentUser();
-    const { data: fetchedUser } = useUser(userId);
+    const { data: current } = useCurrentUser(); //ok tạm rứa đi. nếu có dùng currentUser thì sửa lại như ri xong current.currentUser
+    const { data: fetchedUser } = useUser(userId); // vì có nhiều kiểu user khách nhau nên cứ là tùy xem hắn trả về chi r mình gọi ra sau, cái fetchedUser t k chắc nên là để đó coi sau
+    
+
+    const editModal = useEditModal();
 
     const createAt = useMemo(() => {
         if (!fetchedUser?.createAt) {
@@ -25,8 +29,9 @@ const UserBio: React.FC<UserBioProps> = ({ userId }) => {
     return (
         <div className="border-b-[1px] border-neutral-800 pb-4">
             <div className="flex justify-end p-2">
-                {currentUser?.id === userId ? (
-                    <Button secondary label="Edit" onClick={editModal.onOpen} />
+                {current.currentUser.id === userId ? (
+                    <Button secondary label="Edit" onClick={
+                        editModal.onOpen} />
                 ) : (
                     <Button
                         onClick={() => {}} 

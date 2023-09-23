@@ -9,8 +9,8 @@ import SidebarTweetButton from "./SidebarTweetButton";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
 const Sidebar = () => {
-  const { data: currentUser } = useCurrentUser();
-
+  const { data: current } = useCurrentUser();
+   
   const items = [
     {
       label: "Home",
@@ -25,7 +25,7 @@ const Sidebar = () => {
     },
     {
       label: "Profile",
-      href: "/users/123",
+      href: `/users/${current?.currentUser.id}`,
       icon: FaUser,
       auth: true,
     },
@@ -45,7 +45,7 @@ const Sidebar = () => {
               auth={item.auth}
             />
           ))}
-          {currentUser && (
+          {current && (
             <SidebarItem
               onClick={() => signOut()}
               icon={BiLogOut}
