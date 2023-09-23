@@ -44,14 +44,14 @@ const LoginModal = () => {
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
         value={email}
-        disable={isLoading}
+        disabled={isLoading}
       />
       <Input
         placeholder="Password"
         type="password"
         onChange={(e) => setPassword(e.target.value)}
         value={password}
-        disable={isLoading}
+        disabled={isLoading}
       />
     </div>
   );
