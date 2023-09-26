@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import Button from "./Button";
 import Avatar from "./Avatar";
-import { useRouter } from "next/router";
+
 
 interface FormProps {
   placeholder: string;
@@ -18,7 +18,7 @@ interface FormProps {
 const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
-  const router = useRouter();
+
 
   const { data: current } = useCurrentUser();
 
@@ -36,7 +36,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
       toast.success("Tweet created");
       setBody("");
       mutatePosts();
-      router.reload();
+
     } catch (error) {
       toast.error("Something went wrong");
     } finally {

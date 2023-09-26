@@ -4,7 +4,8 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
 import Avatar from "../Avatar";
-import { AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
+import { AiOutlineHeart, AiOutlineMessage, AiFillHeart } from "react-icons/ai";
+import useLike from "@/hooks/useLike";
 
 interface PostItemProps {
   data: Record<string, any>;
@@ -15,7 +16,8 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
   const router = useRouter();
   const loginModal = useLoginModal();
 
-  const { data: currentUser } = useCurrentUser();
+  const { data: current } = useCurrentUser();
+  const { hasLiked, toggleLike } = useLike({ postId: data.id, userId});
 
   const goToUser = useCallback(
     (event: any) => {
@@ -32,11 +34,14 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
   const onLike = useCallback(
     async (event: any) => {
       event.stopPropagation();
+      if (!current.currentUser) {
+        return loginModal.onOpen();
+      }
+  
+      toggleLike();
+  }, [loginModal, current.currentUser, toggleLike]);
 
-      return loginModal.onOpen();
-    },
-    [loginModal]
-  );
+  const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
 
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
@@ -118,8 +123,8 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
                             hover:text-red-500
                         "
             >
-              <AiOutlineHeart size={20} />
-              <p>{data.comments?.length || 0}</p>
+              <LikeIcon size={20} color={hasLiked ? 'red' : ''} />
+              <p>{data.likesIds?.length || 0}</p>
             </div>
           </div>
         </div>
