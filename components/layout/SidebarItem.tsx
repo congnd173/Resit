@@ -20,19 +20,19 @@ const SidebarItem = ({
   auth,
 }: SidebarItemProps) => {
   const loginModal = useLoginModal();
-  const { data: currentUser } = useCurrentUser();
+  const { data: current } = useCurrentUser();
   const router = useRouter();
   const handleClick = useCallback(() => {
     if (onClick) {
       return onClick();
     }
 
-    if (auth && !currentUser) {
+    if (auth && !current?.currentUser) {
       loginModal.onOpen();
     } else if (href) {
       router.push(href);
     }
-  }, [onClick, router, href, currentUser, auth, loginModal]);
+  }, [onClick, router, href, current?.currentUser, auth, loginModal]);
 
   return (
     <div className="flex flex-row items-center" onClick={handleClick}>

@@ -34,12 +34,12 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
   const onLike = useCallback(
     async (event: any) => {
       event.stopPropagation();
-      if (!current.currentUser) {
+      if (!current?.currentUser) {
         return loginModal.onOpen();
       }
   
       toggleLike();
-  }, [loginModal, current.currentUser, toggleLike]);
+  }, [loginModal, current?.currentUser, toggleLike]);
 
   const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
 

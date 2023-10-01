@@ -17,8 +17,8 @@ const useLike = ({ postId, userId }: { postId: string, userId?: string }) => {
     const hasLiked = useMemo(() => {
         const list = fetchedPost?.likesIds || [];
     
-        return list.includes(current.currentUser?.id);
-    }, [fetchedPost, current.currentUser]);
+        return list.includes(current?.currentUser.id);
+    }, [fetchedPost, current?.currentUser]);
   
     const toggleLike = useCallback(async () => {
         if (!current.currentUser) {
@@ -43,7 +43,7 @@ const useLike = ({ postId, userId }: { postId: string, userId?: string }) => {
         catch (error) {
             toast.error('Something went wrong');
         }
-    }, [current.currentUser, hasLiked, postId, mutateFetchedPosts, mutateFetchedPost, loginModal]);
+    }, [current?.currentUser, hasLiked, postId, mutateFetchedPosts, mutateFetchedPost, loginModal]);
   
     return {
         hasLiked,
