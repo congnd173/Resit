@@ -28,6 +28,11 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
 
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheck = () => {
+    setIsChecked(!isChecked);
+  }
 
   const onSubmit = useCallback(async () => {
     try {
@@ -61,19 +66,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
               disabled={isLoading}
               onChange={(event) => setBody(event.target.value)}
               value={body}
-              className="
-                            disabled:opacity-80
-                            peer
-                            resize-none 
-                            mt-3 
-                            w-full 
-                            bg-black 
-                            ring-0 
-                            outline-none 
-                            text-[20px] 
-                            placeholder-neutral-500 
-                            text-white
-                        "
+              className="disabled:opacity-80 peer resize-none mt-3 w-full bg-black ring-0 outline-none text-[20px] placeholder-neutral-500 text-white"
               placeholder={placeholder}
             ></textarea>
             <hr
@@ -85,9 +78,13 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                             border-neutral-800 
                             transition"
             />
-            <div className="mt-4 flex flex-row justify-end">
+            <div className="mt-4 flex flex-row justify-between">
+              <div className="flex flex-row gap-1 items-center">
+                <input type="checkbox" value={isChecked} onChange={handleCheck}/>
+                <p className="text-neutral-300">Agree to Term and Conditions before submit</p>
+              </div>
               <Button
-                disabled={isLoading || !body}
+                disabled={isLoading || !body || !isChecked}
                 onClick={onSubmit}
                 label="Tweet"
               />
