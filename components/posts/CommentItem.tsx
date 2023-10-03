@@ -28,10 +28,10 @@ const CommentItem: React.FC<CommentItemProps> = ({ data = {} }) => {
         <div 
             className="
                 border-b-[1px] 
-                border-neutral-800 
+                border-gray-800 
                 p-5 
                 cursor-pointer 
-                hover:bg-neutral-900 
+                hover:bg-gray-900 
                 transition
             ">  
             <div className="flex flex-row items-start gap-3">
@@ -50,7 +50,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ data = {} }) => {
                         <span 
                             onClick={goToUser} 
                             className="
-                            text-neutral-500
+                            text-gray-500
                             cursor-pointer
                             hover:underline
                             hidden
@@ -58,7 +58,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ data = {} }) => {
 
                             @{data.user.username}
                         </span>
-                        <span className="text-neutral-500 text-sm">
+                        <span className="text-gray-500 text-sm">
                             {createdAt}
                         </span>
                     </div>

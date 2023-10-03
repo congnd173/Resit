@@ -17,7 +17,7 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
   const loginModal = useLoginModal();
 
   const { data: current } = useCurrentUser();
-  const { hasLiked, toggleLike } = useLike({ postId: data.id, userId});
+  const { hasLiked, toggleLike } = useLike({ postId: data.id, userId });
 
   const goToUser = useCallback(
     (event: any) => {
@@ -37,9 +37,11 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
       if (!current?.currentUser) {
         return loginModal.onOpen();
       }
-  
+
       toggleLike();
-  }, [loginModal, current?.currentUser, toggleLike]);
+    },
+    [loginModal, current?.currentUser, toggleLike]
+  );
 
   const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
 
@@ -56,19 +58,21 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
       onClick={goToPost}
       className="
             border-b-[1px] 
-            border-neutral-800 
+            border-gray-800 
             p-5 
             cursor-pointer 
-            hover:bg-neutral-900 
+            hover:bg-gray-900 
             transition
             "
     >
       <div className="flex flex-row items-start gap-3">
-        <Avatar userId={data.user?.id} />
+        <Avatar
+          userId={data.anonymous ? "/images/placeholder.png" : data.user?.id}
+        />
         <div>
           <div className="flex flex-row items-center gap-2">
             <p
-              onClick={goToUser}
+              onClick={data.anonymous ? goToPost : goToUser}
               className="
                                 text-white 
                                 font-semibold 
@@ -76,21 +80,21 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
                                 hover:underline
                             "
             >
-              {data.user?.name}
+              {data.anonymous ? "Anonymous user" : data.user?.name}
             </p>
             <span
               onClick={goToUser}
               className="
-                                text-neutral-500
+                                text-gray-500
                                 cursor-pointer
                                 hover:underline
                                 hidden
                                 md:block
                             "
             >
-              @{data.user?.username}
+              @{data.anonymous ? "anonymous" : data.user?.username}
             </span>
-            <span className="text-neutral-500 text-sm">{createdAt}</span>
+            <span className="text-gray-500 text-sm">{createdAt}</span>
           </div>
           <div className="text-white mt-1">{data.body}</div>
           <div className="flex flex-row items-center mt-3 gap-10">
@@ -99,11 +103,11 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
                             flex 
                             flex-row 
                             items-center 
-                            text-neutral-500 
+                            text-gray-500 
                             gap-2 
                             cursor-pointer 
                             transition 
-                            hover:text-sky-500
+                            hover:text-blue-500
                         "
             >
               <AiOutlineMessage size={20} />
@@ -116,14 +120,14 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
                             flex 
                             flex-row 
                             items-center 
-                            text-neutral-500 
+                            text-gray-500 
                             gap-2 
                             cursor-pointer 
                             transition 
                             hover:text-red-500
                         "
             >
-              <LikeIcon size={20} color={hasLiked ? 'red' : ''} />
+              <LikeIcon size={20} color={hasLiked ? "red" : ""} />
               <p>{data.likesIds?.length || 0}</p>
             </div>
           </div>
