@@ -32,14 +32,14 @@ const Input: React.FC<InputProps> = ({
           text-lg 
           bg-black 
           border-2
-          border-neutral-800 
+          border-gray-800 
           rounded-md
           outline-none
           text-white
-          focus:border-sky-500
+          focus:border-blue-500
           focus:border-2
           transition
-          disabled:bg-neutral-900
+          disabled:bg-gray-900
           disabled:opacity-70
           disabled:cursor-not-allowed
         "

@@ -7,7 +7,8 @@ import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import Button from "./Button";
 import Avatar from "./Avatar";
-import { useRouter } from "next/router";
+import usePost from "@/hooks/usePost";
+import { Checkbox, Typography, Switch } from "@material-tailwind/react";
 
 interface FormProps {
   placeholder: string;
@@ -18,57 +19,65 @@ interface FormProps {
 const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const registerModal = useRegisterModal();
   const loginModal = useLoginModal();
-  const router = useRouter();
 
   const { data: current } = useCurrentUser();
 
-  const { mutate: mutatePosts } = usePosts(postId as string);
+  const { mutate: mutatePosts } = usePosts();
+  const { mutate: mutatePost } = usePost(postId as string);
 
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
+
+  const handleCheck = () => {
+    setIsChecked(!isChecked);
+  };
+  const handleAnonymous = () => {
+    setIsAnonymous(!isAnonymous);
+  };
 
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
 
-      await axios.post("/api/posts", { body });
+      const url = isComment ? `/api/comments?postId=${postId}` : "/api/posts";
+
+      await axios.post(url, { body, isAnonymous });
 
       toast.success("Tweet created");
       setBody("");
+      setIsAnonymous(false);
+      setIsChecked(false);
       mutatePosts();
-      router.reload();
+      mutatePost();
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
-  }, [body, mutatePosts]);
+  }, [body, mutatePosts, isComment, postId, mutatePost, isAnonymous]);
 
   return (
-    <div className="border-b-[1px] border-neutral-800 px-5 py-2">
+    <div className="border-b-[1px] border-gray-800 px-5 py-2">
       {current?.currentUser ? (
         <div className="flex flex-row gap-4">
           <div>
             <Avatar userId={current?.currentUser?.id} />
           </div>
           <div className="w-full">
+            <Switch
+              color="blue"
+              crossOrigin={isAnonymous}
+              onChange={handleAnonymous}
+              checked={isAnonymous}
+              label="Anonymous post"
+            />
             <textarea
               disabled={isLoading}
               onChange={(event) => setBody(event.target.value)}
               value={body}
-              className="
-                            disabled:opacity-80
-                            peer
-                            resize-none 
-                            mt-3 
-                            w-full 
-                            bg-black 
-                            ring-0 
-                            outline-none 
-                            text-[20px] 
-                            placeholder-neutral-500 
-                            text-white
-                        "
+              className="disabled:opacity-80 peer resize-none mt-3 w-full bg-black ring-0 outline-none text-[20px] placeholder-gray-500 text-white"
               placeholder={placeholder}
             ></textarea>
             <hr
@@ -77,12 +86,33 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                             peer-focus:opacity-100 
                             h-[1px] 
                             w-full 
-                            border-neutral-800 
+                            border-gray-800 
                             transition"
             />
-            <div className="mt-4 flex flex-row justify-end">
+            <div className="mt-4 flex flex-row justify-between">
+              <div className="flex flex-row gap-1 items-center -ml-2">
+                <Checkbox
+                  crossOrigin={isChecked}
+                  onChange={handleCheck}
+                  checked={isChecked}
+                  color="blue"
+                  label={
+                    <Typography color="gray" className="flex font-medium">
+                      I agree with the
+                      <Typography
+                        as="a"
+                        href="#"
+                        color="blue"
+                        className="font-medium transition-colors hover:text-blue-700"
+                      >
+                        &nbsp;terms and conditions
+                      </Typography>
+                    </Typography>
+                  }
+                />
+              </div>
               <Button
-                disabled={isLoading || !body}
+                disabled={isLoading || !body || !isChecked}
                 onClick={onSubmit}
                 label="Tweet"
               />
@@ -92,7 +122,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
       ) : (
         <div className="py-8">
           <h1 className="text-white text-2xl text-center mb-4 font-bold">
-            Welcome to Twitter
+            Welcome to Sweattter
           </h1>
           <div className="flex flex-row items-center justify-center gap-4">
             <Button label="Login" onClick={loginModal.onOpen} />

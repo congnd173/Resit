@@ -57,7 +57,7 @@ const Modal: React.FC<ModalProps> = ({
           z-50 
           outline-none 
           focus:outline-none
-          bg-neutral-800
+          bg-gray-800
           bg-opacity-70
         "
       >
