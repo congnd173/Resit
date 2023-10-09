@@ -5,11 +5,11 @@ const SidebarLogo = () => {
   const router = useRouter();
   return (
     <div
-      className=" rounded-full h-18 w-18 p-4 flex items-center justify-center hover:bg-blue-300/10 cursor-pointer transition gap-2"
+      className=" rounded-full h-18 w-18 p-4 flex items-center justify-center hover:bg-gray-700 cursor-pointer transition gap-2"
       onClick={() => router.push("/")}
     >
       <GiPenguin size={28} color="white" />
-      <p className="text-white font-bold">Not Twitter</p>
+      <p className="text-white font-bold">XYZ</p>
     </div>
   );
 };
