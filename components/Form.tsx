@@ -8,7 +8,14 @@ import toast from "react-hot-toast";
 import Button from "./Button";
 import Avatar from "./Avatar";
 import usePost from "@/hooks/usePost";
-import { Checkbox, Typography, Switch } from "@material-tailwind/react";
+import {
+  Checkbox,
+  Typography,
+  Switch,
+  Select,
+  Option,
+} from "@material-tailwind/react";
+import useCategories from "@/hooks/useCategories";
 
 interface FormProps {
   placeholder: string;
@@ -21,6 +28,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const loginModal = useLoginModal();
 
   const { data: current } = useCurrentUser();
+  const { data: categories = [] } = useCategories();
 
   const { mutate: mutatePosts } = usePosts();
   const { mutate: mutatePost } = usePost(postId as string);
@@ -29,12 +37,17 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [categoryId, setCategoryId] = useState("");
+  console.log(categoryId);
 
   const handleCheck = () => {
     setIsChecked(!isChecked);
   };
   const handleAnonymous = () => {
     setIsAnonymous(!isAnonymous);
+  };
+  const handleSelect = (value: any) => {
+    setCategoryId(value);
   };
 
   const onSubmit = useCallback(async () => {
@@ -43,7 +56,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
 
       const url = isComment ? `/api/comments?postId=${postId}` : "/api/posts";
 
-      await axios.post(url, { body, isAnonymous });
+      await axios.post(url, { body, isAnonymous, categoryId });
 
       toast.success("Tweet created");
       setBody("");
@@ -56,7 +69,15 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [body, mutatePosts, isComment, postId, mutatePost, isAnonymous]);
+  }, [
+    body,
+    mutatePosts,
+    isComment,
+    postId,
+    mutatePost,
+    isAnonymous,
+    categoryId,
+  ]);
 
   return (
     <div className="border-b-[1px] border-gray-800 px-5 py-2">
@@ -66,13 +87,33 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
             <Avatar userId={current?.currentUser?.id} />
           </div>
           <div className="w-full">
-            <Switch
-              color="blue"
-              crossOrigin={isAnonymous}
-              onChange={handleAnonymous}
-              checked={isAnonymous}
-              label="Anonymous post"
-            />
+            <div className="flex flex-row justify-between items-center">
+              <Switch
+                color="blue"
+                crossOrigin={isAnonymous}
+                onChange={handleAnonymous}
+                checked={isAnonymous}
+                label="Anonymous post"
+              />
+              <div className="w-72">
+                <Select
+                  label="Select category"
+                  value={categoryId}
+                  onChange={handleSelect}
+                >
+                  {categories.map((category: any) => (
+                    <Option
+                      key={category.id}
+                      value={category.id}
+                      data-id={category.id}
+                    >
+                      {category.name}
+                    </Option>
+                  ))}
+                </Select>
+              </div>
+            </div>
+
             <textarea
               disabled={isLoading}
               onChange={(event) => setBody(event.target.value)}

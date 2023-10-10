@@ -5,12 +5,14 @@ import { toast } from "react-hot-toast";
 import Input from "../Input";
 import Modal from "../Modal";
 import useCategoryModal from "@/hooks/useCategoryModal";
+import { useRouter } from "next/router";
 
 const CategoryModal = () => {
   const categoryModal = useCategoryModal();
 
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const onSubmit = useCallback(async () => {
     try {
@@ -19,6 +21,7 @@ const CategoryModal = () => {
         name,
       });
       toast.success("New category created");
+      router.reload();
       categoryModal.onClose();
     } catch (error) {
       console.log(error);
@@ -26,7 +29,7 @@ const CategoryModal = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [categoryModal, name]);
+  }, [categoryModal, name, router]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">

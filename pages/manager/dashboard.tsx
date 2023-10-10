@@ -17,7 +17,7 @@ const Dashboard = ({ userId }: DashboardProps) => {
   if (current?.currentUser.role !== "QA_MANAGER") {
     return (
       <>
-        <div className="text-white flex justify-center flex-col items-center gap-2 mt-16 ">
+        <div className="text-white flex justify-center flex-col items-center gap-2 mt-16 rounded-lg overflow-hidden">
           <h1 className="font-medium text-2xl">
             You do not have permission to this page
           </h1>

@@ -10,14 +10,13 @@ export default async function handler(
     return res.status(405).end();
   }
 
-  const { currentUser } = await serverAuth(req, res);
-
-  if (currentUser.role !== "QA_MANAGER") {
-    return res.status(401);
-  }
-
   try {
+    const { currentUser } = await serverAuth(req, res);
+
     if (req.method === "POST") {
+      if (currentUser.role !== "QA_MANAGER") {
+        return res.status(401);
+      }
       const { name } = req.body;
       const category = await prisma.category.create({
         data: {

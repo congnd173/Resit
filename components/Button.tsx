@@ -6,6 +6,7 @@ interface ButtonProps {
   onClick: () => void;
   disabled?: boolean;
   outline?: boolean;
+  danger?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,6 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   large,
   disabled,
   outline,
+  danger,
 }) => {
   return (
     <button
@@ -39,6 +41,7 @@ const Button: React.FC<ButtonProps> = ({
         ${outline ? "bg-transparent" : ""}
         ${outline ? "border-white" : ""}
         ${outline ? "text-white" : ""}
+        ${danger ? "bg-red-500 text-white !border-black" : ""}
       `}
     >
       {label}

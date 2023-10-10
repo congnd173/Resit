@@ -95,6 +95,9 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
               @{data.anonymous ? "anonymous" : data.user?.username}
             </span>
             <span className="text-gray-500 text-sm">{createdAt}</span>
+            <span className="text-gray-300 font-semibold text-sm">
+              #{data.category.name}
+            </span>
           </div>
           <div className="text-white mt-1">{data.body}</div>
           <div className="flex flex-row items-center mt-3 gap-10">
