@@ -13,10 +13,18 @@ export default function Home() {
     if (current?.currentUser.role === "QA_MANAGER") {
       router.push("/manager/dashboard");
     }
-  }, []);
+  }, [current?.currentUser, router]);
+
+  let label;
+  if (current?.currentUser.role === "QA_COORDINATOR") {
+    label = current?.currentUser.department + " Deparment";
+  } else {
+    label = "Home";
+  }
+
   return (
     <>
-      <Header label="Home" />
+      <Header label={label} />
       <Form placeholder="Write something" />
       <PostFeed />
     </>

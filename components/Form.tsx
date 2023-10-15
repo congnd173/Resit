@@ -29,6 +29,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
 
   const { data: current } = useCurrentUser();
   const { data: categories = [] } = useCategories();
+  console.log(current);
 
   const { mutate: mutatePosts } = usePosts();
   const { mutate: mutatePost } = usePost(postId as string);
@@ -38,7 +39,6 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [categoryId, setCategoryId] = useState("");
-  console.log(categoryId);
 
   const handleCheck = () => {
     setIsChecked(!isChecked);

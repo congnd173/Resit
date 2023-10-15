@@ -11,7 +11,6 @@ const Dashboard = ({ userId }: DashboardProps) => {
   const { data: current } = useCurrentUser();
   const router = useRouter();
   const { data: posts = [] } = usePosts(userId);
-
   console.log(posts);
 
   if (current?.currentUser.role !== "QA_MANAGER") {
@@ -42,6 +41,9 @@ const Dashboard = ({ userId }: DashboardProps) => {
               Categories
             </th>
             <th scope="col" className="px-6 py-4">
+              Department
+            </th>
+            <th scope="col" className="px-6 py-4">
               Date
             </th>
             <th scope="col" className="px-6 py-4">
@@ -54,7 +56,12 @@ const Dashboard = ({ userId }: DashboardProps) => {
             <tr key={post.id} className="border-b">
               <td className="whitespace-nowrap px-6 py-4">{index + 1}</td>
               <td className="whitespace-nowrap px-6 py-4">{post.user.name}</td>
-              <td className="whitespace-nowrap px-6 py-4">Category</td>
+              <td className="whitespace-nowrap px-6 py-4">
+                {post.category.name}
+              </td>
+              <td className="whitespace-nowrap px-6 py-4">
+                {post.user.department}
+              </td>
               <td className="whitespace-nowrap px-6 py-4">{post.createdAt}</td>
               <td className="whitespace-nowrap px-6 py-4">{post.body}</td>
             </tr>

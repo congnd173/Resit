@@ -15,8 +15,6 @@ export default async function handler(
     const { currentUser } = await serverAuth(req, res);
     const { name, username, bio, profileImage, coverImage } = req.body;
 
-    console.log(currentUser);
-
     if (!name || !username) {
       throw new Error("Missing fields");
     }

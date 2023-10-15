@@ -29,6 +29,7 @@ export default async function handler(
 
     if (req.method === "GET") {
       const { userId } = req.query;
+      const { currentUser } = await serverAuth(req, res);
 
       let posts;
 
@@ -44,6 +45,19 @@ export default async function handler(
           },
           orderBy: {
             createdAt: "desc",
+          },
+        });
+      } else if (currentUser.role === "QA_COORDINATOR") {
+        posts = await prisma.post.findMany({
+          include: {
+            user: true,
+            comments: true,
+            category: true,
+          },
+          where: {
+            user: {
+              department: currentUser.department,
+            },
           },
         });
       } else {

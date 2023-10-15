@@ -31,6 +31,11 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </Layout>
       )}
+      {current?.currentUser.role === "QA_COORDINATOR" && (
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      )}
       {current?.currentUser.role === "QA_MANAGER" && (
         <ManagerLayout>
           <Component {...pageProps} />

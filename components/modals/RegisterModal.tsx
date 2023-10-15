@@ -8,6 +8,7 @@ import useRegisterModal from "@/hooks/useRegisterModal";
 
 import Input from "../Input";
 import Modal from "../Modal";
+import { Option, Select } from "@material-tailwind/react";
 
 const RegisterModal = () => {
   const registerModal = useRegisterModal();
@@ -18,6 +19,11 @@ const RegisterModal = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [department, setDepartment] = useState("");
+
+  const handleDepartment = (value: any) => {
+    setDepartment(value);
+  };
 
   const onToggle = useCallback(() => {
     if (isLoading) {
@@ -30,12 +36,12 @@ const RegisterModal = () => {
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
-      // Register function
       await axios.post("/api/register", {
         email,
         password,
         username,
         name,
+        department,
       });
 
       toast.success("Account created");
@@ -73,6 +79,18 @@ const RegisterModal = () => {
         value={username}
         disabled={isLoading}
       />
+      <div className="w-full">
+        <Select
+          label="Department"
+          color="blue"
+          className="text-lg"
+          value={department}
+          onChange={handleDepartment}
+        >
+          <Option value="ACADEMIC">Academic</Option>
+          <Option value="SUPPORT">Support</Option>
+        </Select>
+      </div>
       <Input
         placeholder="Password"
         onChange={(e) => setPassword(e.target.value)}
