@@ -87,6 +87,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
             <Avatar userId={current?.currentUser?.id} />
           </div>
           <div className="w-full">
+            {!isComment && (
             <div className="flex flex-row justify-between items-center">
               <Switch
                 color="blue"
@@ -95,24 +96,27 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                 checked={isAnonymous}
                 label="Anonymous post"
               />
-              <div className="w-72">
-                <Select
-                  label="Select category"
-                  value={categoryId}
-                  onChange={handleSelect}
-                >
-                  {categories.map((category: any) => (
-                    <Option
-                      key={category.id}
-                      value={category.id}
-                      data-id={category.id}
-                    >
-                      {category.name}
-                    </Option>
-                  ))}
-                </Select>
-              </div>
+              
+                <div className="w-72">
+                  <Select
+                    label="Select category"
+                    value={categoryId}
+                    onChange={handleSelect}
+                  >
+                    {categories.map((category: any) => (
+                      <Option
+                        key={category.id}
+                        value={category.id}
+                        data-id={category.id}
+                      >
+                        {category.name}
+                      </Option>
+                    ))}
+                  </Select>
+                </div>
+             
             </div>
+             )}
 
             <textarea
               disabled={isLoading}
