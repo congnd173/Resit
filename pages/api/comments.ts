@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (post?.userId) {
                 await prisma.notification.create({
                     data: {
-                        body: 'Someone replied your tweet!',
+                        body: 'Someone replied your post!',
                         userId: post.userId
                     }
                 });

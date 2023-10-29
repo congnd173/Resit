@@ -102,22 +102,6 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
           <div className="text-white mt-1">{data.body}</div>
           <div className="flex flex-row items-center mt-3 gap-10">
             <div
-              className="
-                            flex 
-                            flex-row 
-                            items-center 
-                            text-gray-500 
-                            gap-2 
-                            cursor-pointer 
-                            transition 
-                            hover:text-blue-500
-                        "
-            >
-              <AiOutlineMessage size={20} />
-              <p>{data.comments?.length || 0}</p>
-            </div>
-
-            <div
               onClick={onLike}
               className="
                             flex 
@@ -133,6 +117,23 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
               <LikeIcon size={20} color={hasLiked ? "red" : ""} />
               <p>{data.likesIds?.length || 0}</p>
             </div>
+            <div
+              className="
+                            flex 
+                            flex-row 
+                            items-center 
+                            text-gray-500 
+                            gap-2 
+                            cursor-pointer 
+                            transition 
+                            hover:text-blue-500
+                        "
+            >
+              <AiOutlineMessage size={20} />
+              <p>{data.comments?.length || 0}</p>
+            </div>
+
+            
           </div>
         </div>
       </div>

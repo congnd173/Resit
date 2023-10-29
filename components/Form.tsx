@@ -58,7 +58,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
 
       await axios.post(url, { body, isAnonymous, categoryId });
 
-      toast.success("Tweet created");
+      toast.success("Idea created");
       setBody("");
       setIsAnonymous(false);
       setIsChecked(false);
@@ -88,20 +88,20 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
           </div>
           <div className="w-full">
             {!isComment && (
-            <div className="flex flex-row justify-between items-center">
-              <Switch
-                color="blue"
-                crossOrigin={isAnonymous}
-                onChange={handleAnonymous}
-                checked={isAnonymous}
-                label="Anonymous post"
-              />
-              
+              <div className="flex flex-row justify-between items-center">
+                <Switch
+                  color="blue"
+                  crossOrigin={isAnonymous}
+                  onChange={handleAnonymous}
+                  checked={isAnonymous}
+                  label="Anonymous post"
+                />
                 <div className="w-72">
                   <Select
                     label="Select category"
                     value={categoryId}
                     onChange={handleSelect}
+                    className="text-white"
                   >
                     {categories.map((category: any) => (
                       <Option
@@ -114,9 +114,8 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
                     ))}
                   </Select>
                 </div>
-             
-            </div>
-             )}
+              </div>
+            )}
 
             <textarea
               disabled={isLoading}
@@ -159,7 +158,7 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
               <Button
                 disabled={isLoading || !body || !isChecked}
                 onClick={onSubmit}
-                label="Tweet"
+                label="Post"
               />
             </div>
           </div>

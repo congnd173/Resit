@@ -17,7 +17,7 @@ const SidebarTweetButton = () => {
       </div>
       <div className="mt-6 hidden lg:block px-4 py-2 rounded-full bg-blue-500 hover:bg-opacity-90 cursor-pointer transition ">
         <p className=" hidden lg:block text-center font-semibold text-white text-[20px]">
-          Tweet
+          Post Now
         </p>
       </div>
     </div>

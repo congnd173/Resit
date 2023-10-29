@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import PostFeed from "@/components/posts/PostFeed";
 import useCategories from "@/hooks/useCategories";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { Option, Select } from "@material-tailwind/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -12,10 +11,8 @@ export default function Home() {
   const router = useRouter();
   const { data: categories = [] } = useCategories();
 
-
-  const [filterCriteria, setFilterCriteria] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-
+  const [filterCriteria, setFilterCriteria] = useState("latest");
+  const [categoryId, setCategoryId] = useState("#");
 
   useEffect(() => {
     if (current?.currentUser.role === "QA_MANAGER") {
@@ -30,12 +27,19 @@ export default function Home() {
     label = "Home";
   }
 
-  const handleSelectFilter = (value: any) => {
-    setFilterCriteria(value);
+  const handleSelectFilter = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value;
+    setFilterCriteria(selectedValue);
   };
 
-  const handleSelectCategory = (value: any) => {
-    setCategoryId(value);
+  const handleSelectCategory = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedValue = event.target.value;
+    setCategoryId(selectedValue);
+    if (!selectedValue) {
+      setCategoryId("");
+    }
   };
 
   console.log(filterCriteria);
@@ -44,38 +48,30 @@ export default function Home() {
     <>
       <Header label={label} />
       <Form placeholder="Write something" />
-      <div className="flex flex-row gap-2 p-1">
-        <Select label="View by" value={filterCriteria} onChange={handleSelectFilter}>
-          <Option value="mostLikes" data-id="mostLikes">
-            Most Like
-          </Option>
-          <Option value="mostComments" data-id="mostComments">
-            Most Comments
-          </Option>
-          <Option value="latest" data-id="latest">
-            Latest
-          </Option>
-          <Option value="oldest" data-id="oldest">
-            Oldest
-          </Option>
-          <Option value="abc" data-id="abc">
-            No filter
-          </Option>
-        </Select>
-        <Select
-          label="Select category"
-          value={categoryId}
-          onChange={handleSelectCategory}
+      <div className="flex flex-row gap-4 p-3">
+        <select
+          value={filterCriteria}
+          onChange={handleSelectFilter}
+          color="blue"
+          className="bg-black text-white w-full p-2 transition border-gray-100 focus:outline-none border-b"
         >
+          <option value="latest">Latest</option>
+          <option value="mostLikes">Most Like</option>
+          <option value="mostComments">Most Comments</option>
+          <option value="oldest">Oldest</option>
+        </select>
+        <select
+          className="bg-black text-white w-full p-2 transition border-gray-100 focus:outline-none border-b"
+          onChange={handleSelectCategory}
+          value={categoryId}
+        >
+          <option value="#">No filter</option>
           {categories.map((category: any) => (
-            <Option key={category.id} value={category.id} data-id={category.id}>
+            <option key={category.id} value={category.id} className="py-2">
               {category.name}
-            </Option>
+            </option>
           ))}
-          <Option value="" data-id="">
-            No filter
-          </Option>
-        </Select>
+        </select>
       </div>
       <PostFeed filterCriteria={filterCriteria} categoryId={categoryId} />
     </>
