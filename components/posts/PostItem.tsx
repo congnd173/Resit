@@ -2,10 +2,11 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import useLoginModal from "@/hooks/useLoginModal";
 import { formatDistanceToNowStrict } from "date-fns";
 import { useRouter } from "next/router";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Avatar from "../Avatar";
-import { AiOutlineHeart, AiOutlineMessage, AiFillHeart } from "react-icons/ai";
-import useLike from "@/hooks/useLike";
+import { AiOutlineMessage, AiFillLike, AiFillDislike } from "react-icons/ai";
+import useVote from "@/hooks/useVote";
+import useUserVote from "@/hooks/useUserVote";
 
 interface PostItemProps {
   data: Record<string, any>;
@@ -17,7 +18,23 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
   const loginModal = useLoginModal();
 
   const { data: current } = useCurrentUser();
-  const { hasLiked, toggleLike } = useLike({ postId: data.id, userId });
+  const { vote } = useVote({ postId: data.id });
+  // const userVote = useUserVote({ postId: data.id, userId });
+  // const [voteType, setVoteType] = useState("");
+  // console.log(userVote);
+
+  // useEffect(() => {
+  //   if (userVote && userVote.value === 1) {
+  //     setVoteType("like");
+  //   } else if (userVote && userVote.value === -1) {
+  //     setVoteType("dislike");
+  //   } else {
+  //     // Set voteType to an empty string if userVote is null or other cases
+  //     setVoteType("");
+  //   }
+  // }, [userVote]);
+
+  // console.log(voteType);
 
   const goToUser = useCallback(
     (event: any) => {
@@ -31,20 +48,6 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
     router.push(`/posts/${data.id}`);
   }, [router, data?.id]);
 
-  const onLike = useCallback(
-    async (event: any) => {
-      event.stopPropagation();
-      if (!current?.currentUser) {
-        return loginModal.onOpen();
-      }
-
-      toggleLike();
-    },
-    [loginModal, current?.currentUser, toggleLike]
-  );
-
-  const LikeIcon = hasLiked ? AiFillHeart : AiOutlineHeart;
-
   const createdAt = useMemo(() => {
     if (!data?.createdAt) {
       return null;
@@ -53,9 +56,16 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
     return formatDistanceToNowStrict(new Date(data.createdAt));
   }, [data.createdAt]);
 
+  const handleVote = async (value: number) => {
+    if (!current.currentUser) {
+      loginModal.onOpen();
+      return;
+    }
+    return vote(value);
+  };
+
   return (
     <div
-      onClick={goToPost}
       className="
             border-b-[1px] 
             border-gray-800 
@@ -102,7 +112,6 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
           <div className="text-white mt-1">{data.body}</div>
           <div className="flex flex-row items-center mt-3 gap-10">
             <div
-              onClick={onLike}
               className="
                             flex 
                             flex-row 
@@ -111,13 +120,14 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
                             gap-2 
                             cursor-pointer 
                             transition 
-                            hover:text-red-500
                         "
             >
-              <LikeIcon size={20} color={hasLiked ? "red" : ""} />
-              <p>{data.likesIds?.length || 0}</p>
+              <AiFillLike size={20} onClick={() => handleVote(1)} />
+              <p>{data.score}</p>
+              <AiFillDislike size={20} onClick={() => handleVote(-1)} />
             </div>
             <div
+              onClick={goToPost}
               className="
                             flex 
                             flex-row 
@@ -132,8 +142,6 @@ const PostItem: React.FC<PostItemProps> = ({ data = {}, userId }) => {
               <AiOutlineMessage size={20} />
               <p>{data.comments?.length || 0}</p>
             </div>
-
-            
           </div>
         </div>
       </div>
